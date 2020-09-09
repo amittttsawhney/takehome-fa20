@@ -55,7 +55,6 @@ def mirror(name):
 @app.route("/restaurants", methods=['GET'])
 def get_all_restaurants():
     min_rating = request.args.get('minRating')
-    print(min_rating)
     if min_rating is not None:
         restaurants = db.get('restaurants')
         filtered_restauraunts = [restaurant for restaurant in db.get(
