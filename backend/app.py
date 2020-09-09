@@ -63,6 +63,11 @@ def delete_restaurant(id):
 
 
 # TODO: Implement the rest of the API here!
+@app.route("/restaurants/<id>", methods=['GET'])
+def get_restauraunt(id):
+    if db.getById('restaurants', int(id)) is None:
+        return create_response(status=404, message="No restaurant with this id exists")
+    return create_response({"restaurant": db.getById('restaurants', int(id))})
 
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
