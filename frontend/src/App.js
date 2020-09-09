@@ -20,7 +20,6 @@ class App extends Component {
     var nextId = this.state.restaurants[this.state.restaurants.length - 1].id + 1;
     var name = document.getElementById("new-restaurant").value;
     var rating = 0;
-
     var restaurant = {id: nextId, name: name, rating: rating};
 
     this.setState({restaurants: this.state.restaurants.concat(restaurant)});
