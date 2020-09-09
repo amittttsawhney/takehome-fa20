@@ -82,17 +82,6 @@ def get_restauraunt(id):
     return create_response({"restaurant": db.getById('restaurants', int(id))})
 
 
-@app.route("/restaurants/minRating", methods=['GET'])
-def get_rated_restaurants():
-    min_rating = request.args.get('minRating')
-    restaurants = db.get('restaurants')
-    filtered_restauraunts = [restaurant for restaurant in db.get(
-        'restaurants') if restaurant['rating'] >= int(min_rating)]
-    if len(filtered_restauraunts) == 0:
-        return create_response(status=404, message="No restaurants have a rating at or above " + min_rating)
-    return create_response({"restaurants": filtered_restauraunts})
-
-
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
 """
