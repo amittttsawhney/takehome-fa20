@@ -19,7 +19,6 @@ class App extends Component {
     return (
       <div className="App">
         <Instructions complete={true} />
-        <Counter />
         {this.state.restaurants.map(x => (
           <Restaurant id={x.id} name={x.name} rating={x.rating} />
         ))}
