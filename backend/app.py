@@ -10,7 +10,7 @@ def create_response(
     data: dict = None, status: int = 200, message: str = ""
 ) -> Tuple[Response, int]:
     """Wraps response in a consistent format throughout the API.
-    
+
     Format inspired by https://medium.com/@shazow/how-i-design-json-api-responses-71900f00f2db
     Modifications included:
     - make success a boolean since there's only 2 values
@@ -45,14 +45,26 @@ def create_response(
 def hello_world():
     return create_response({"content": "hello world!"})
 
+
 @app.route("/mirror/<name>")
 def mirror(name):
     data = {"name": name}
     return create_response(data)
 
+
 @app.route("/restaurants", methods=['GET'])
 def get_all_restaurants():
+    min_rating = request.args.get('minRating')
+    print(min_rating)
+    if min_rating is not None:
+        restaurants = db.get('restaurants')
+        filtered_restauraunts = [restaurant for restaurant in db.get(
+            'restaurants') if restaurant['rating'] >= int(min_rating)]
+        if len(filtered_restauraunts) == 0:
+            return create_response(status=404, message="No restaurants have a rating at or above " + min_rating)
+        return create_response({"restaurants": filtered_restauraunts})
     return create_response({"restaurants": db.get('restaurants')})
+
 
 @app.route("/restaurants/<id>", methods=['DELETE'])
 def delete_restaurant(id):
@@ -68,6 +80,18 @@ def get_restauraunt(id):
     if db.getById('restaurants', int(id)) is None:
         return create_response(status=404, message="No restaurant with this id exists")
     return create_response({"restaurant": db.getById('restaurants', int(id))})
+
+
+@app.route("/restaurants/minRating", methods=['GET'])
+def get_rated_restaurants():
+    min_rating = request.args.get('minRating')
+    restaurants = db.get('restaurants')
+    filtered_restauraunts = [restaurant for restaurant in db.get(
+        'restaurants') if restaurant['rating'] >= int(min_rating)]
+    if len(filtered_restauraunts) == 0:
+        return create_response(status=404, message="No restaurants have a rating at or above " + min_rating)
+    return create_response({"restaurants": filtered_restauraunts})
+
 
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
